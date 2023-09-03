@@ -24,6 +24,14 @@ const subUserValidation=Joi.object({
         'string.empty':'Full Name Is Required',
         'any.required':'Full Name Is Required'
     }),
+    gameid:Joi.string().required().messages({
+        'string.empty':'Full Name Is Required',
+        'any.required':'Full Name Is Required'
+    }),
+    game:Joi.string().required().messages({
+        'string.empty':'Full Name Is Required',
+        'any.required':'Full Name Is Required'
+    }),
 })
 
-export default adminValidationSchema;
+export default subUserValidation;

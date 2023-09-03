@@ -1,14 +1,14 @@
-import admins from "../Model/Adminmodel.js";
-import adminValidationSchema from "../Validation/Adminvalidation.js";
 import bcrypt from "bcrypt";
+import subUserValidation from "../Validation/subUserValidation.js";
+import subadmin from "../Model/subUserModel.js";
 
 export const subUserReg = async (req, res) => {
 
 
-    const { fullname, email, phonenumber, password, role} = req.body;
+    const { fullname, email, phonenumber, password, role,gameid,game} = req.body;
 
     const validatedata = { fullname, email, phonenumber, password, role };
-    const { error, value } = adminValidationSchema.validate(validatedata);
+    const { error, value } = subUserValidation.validate(validatedata);
 
     if (error) {
         const errors = error.details.map((detail) => detail.message);
@@ -16,19 +16,19 @@ export const subUserReg = async (req, res) => {
     }
 
     try {
-        const preuser = await admins.findOne({ email: email });
+        const preuser = await subadmin.findOne({ email: email });
         if (preuser) {
-            return res.status(400).json({ msg: "Admin is Already present" });
+            return res.status(400).json({ msg: "Sub Admin is Already present" });
         }
         else {
 
             const hashedpassword = await bcrypt.hash(password, 10);
-            const addadmin = new admins({
-                fullname, phonenumber, email, password: hashedpassword, role
+            const addadmin = new subadmin({
+                fullname, phonenumber, email, password, role,gameid,game
             });
 
             addadmin.save();
-            return res.status(200).json({ msg: "Admin Added Successfully" });
+            return res.status(200).json({ msg: "Sub Admin Added Successfully" });
 
         }
     } catch (error) {

@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 
-const AdminSchema = new mongoose.Schema({
+const subAdminSchema = new mongoose.Schema({
     fullname:{
         type:String,
         required:true
@@ -24,10 +24,19 @@ const AdminSchema = new mongoose.Schema({
         type:String,
         required:true,
         default:"admin"
+    },
+    gameid:{
+        type:String,
+        required:true,
+    },
+    game:{
+        type:String,
+        required:true
     }
+
 },{timestamps:true});
 
 
-const admins=new mongoose.model('admins',AdminSchema);
+const subadmin=new mongoose.model('subadmins',subAdminSchema);
 
-export default admins;
+export default subadmin;
