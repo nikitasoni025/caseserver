@@ -7,7 +7,9 @@ export const subUserReg = async (req, res) => {
 
     const { fullname, email, phonenumber, password, role,gameid,game} = req.body;
 
-    const validatedata = { fullname, email, phonenumber, password, role };
+    console.log(req.body);
+
+    const validatedata = { fullname, email, phonenumber, password, role,gameid,game };
     const { error, value } = subUserValidation.validate(validatedata);
 
     if (error) {

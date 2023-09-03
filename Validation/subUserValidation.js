@@ -21,16 +21,16 @@ const subUserValidation=Joi.object({
         'any.required':'Password is Required'
     }),
     role:Joi.string().required().messages({
-        'string.empty':'Full Name Is Required',
-        'any.required':'Full Name Is Required'
+        'string.empty':'role Is Required',
+        'any.required':'role Is Required'
     }),
     gameid:Joi.string().required().messages({
-        'string.empty':'Full Name Is Required',
-        'any.required':'Full Name Is Required'
+        'string.empty':'gameid Is Required',
+        'any.required':'gameid Is Required'
     }),
     game:Joi.string().required().messages({
-        'string.empty':'Full Name Is Required',
-        'any.required':'Full Name Is Required'
+        'string.empty':'game Is Required',
+        'any.required':'game Is Required'
     }),
 })
 
