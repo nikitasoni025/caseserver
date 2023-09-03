@@ -1,11 +1,13 @@
 import express  from "express";
+import { subUserLogin, subUserReg } from "../Controller/subUser";
 
 const router=express.Router();
 
 
 // // Participants API Routes
 
-router.post("/subuser/signup");
+router.post("/subuser/signup",subUserReg);
+router.post("/subuser/signin",subUserLogin);
 
 // router.post("/register",register);
 // router.post("/signin",userSignin);

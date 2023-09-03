@@ -39,3 +39,49 @@ export const subUserReg = async (req, res) => {
     }
 
 }
+
+
+export const subUserLogin = async (req, res) => {
+    const { username, password } = req.body;
+
+    // Check if the provided username is an email or a phone number
+    const isEmail = /^\S+@\S+\.\S+$/.test(username);
+    const isPhoneNumber = /^\d{10}$/.test(username);
+
+    let user;
+
+    if (isEmail) {
+        // If the provided username is an email, query by email
+        user = await subadmin.findOne({ email: username });
+    } else if (isPhoneNumber) {
+        // If the provided username is a phone number, query by phone number
+        user = await subadmin.findOne({ phone: username });
+    } else {
+        return res.status(400).json({ msg: "Invalid username format" });
+    }
+
+    if (!user) {
+        return res.status(400).json({ msg: "User Not Found" });
+    }
+
+    try {
+        const match = await bcrypt.compare(password, user.password);
+
+        // if (match) {
+        //     return res.status(200).json({ data: { id: user._id, name: user.fullname, email: user.email, role: user.role } });
+        // } else {
+        //     return res.status(400).json({ msg: "Password Did not Matched !!" });
+        // }
+
+        if (user.password === password) {
+            return res.status(200).json({ data: { id: user._id, name: user.fullname, email: user.email, role: user.role } });
+        } else {
+            return res.status(400).json({ msg: "Password Did not Matched !!" });
+        }
+
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({ msg: "Signin Failed !!" });
+
+    }
+}
