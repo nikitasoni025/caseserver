@@ -1,13 +1,24 @@
 import express  from "express";
-import { subUserLogin, subUserReg } from "../Controller/subUser.js";
+import { getCokkie, subUserLogin, subUserLogout, subUserReg } from "../Controller/subUser.js";
+import { createLuckyNum, getluckyNum, updateLuckyNumbers } from "../Controller/luckyNum.js";
+import { verifyToken } from "../Middleware/tokenVerification.js";
 
 const router=express.Router();
 
 
-// // Participants API Routes
+// Sub User Api Routes
 
 router.post("/subuser/signup",subUserReg);
 router.post("/subuser/signin",subUserLogin);
+router.get("/subuser/logout",subUserLogout);
+router.get('/getcookie',getCokkie);
+
+
+// Lucky Number Api Routes
+router.post("/lucky/create",createLuckyNum);
+router.get('/lucky/get',getluckyNum);
+router.post('/lucky/update',updateLuckyNumbers);
+
 
 // router.post("/register",register);
 // router.post("/signin",userSignin);
