@@ -120,7 +120,7 @@ export const subUserLogin = async (req, res) => {
             const token = createJwtToken(user._id);
             res.cookie("authToken", token, {
                 path: "/",
-                maxAge: 24 * 60 * 60 * 1000,
+                maxAge: 14 * 60 * 60 * 1000,
                 httpOnly: true,
             });
             return res.status(200).json({ data: { id: user._id, name: user.fullname, email: user.email, role: user.role, token } });
