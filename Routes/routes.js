@@ -2,6 +2,7 @@ import express  from "express";
 import { getCokkie, subUserLogin, subUserLogout, subUserReg } from "../Controller/subUser.js";
 import { createLuckyNum, getluckyNum, updateLuckyNumbers } from "../Controller/luckyNum.js";
 import { verifyToken } from "../Middleware/tokenVerification.js";
+import { addAd, fetchAdds, updateAd } from "../Controller/addsController.js";
 
 const router=express.Router();
 
@@ -18,6 +19,13 @@ router.get('/getcookie',getCokkie);
 router.post("/lucky/create",createLuckyNum);
 router.get('/lucky/get',getluckyNum);
 router.post('/lucky/update',updateLuckyNumbers);
+
+
+
+// Ad Api Routes
+router.post('/ad/create',addAd);
+router.post('/ad/update',updateAd);
+router.get('/ad/get',fetchAdds);
 
 
 // router.post("/register",register);
