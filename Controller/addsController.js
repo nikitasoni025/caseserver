@@ -32,7 +32,7 @@ export const updateAd=async (req,res)=>{
     }
     try {
 
-        const result = await luckynumbers.findByIdAndUpdate(id, updateData, { new: true });
+        const result = await addmodel.findByIdAndUpdate(id, updateData, { new: true });
         if (!result) {
             return res.status(400).json({ msg: "Add Not Found" });
         }
