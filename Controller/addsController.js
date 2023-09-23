@@ -37,7 +37,7 @@ export const updateAd=async (req,res)=>{
             return res.status(400).json({ msg: "Add Not Found" });
         }
 
-        return res.status(200).json({ msg: 'Add Updated Successfully', result: result });
+        return res.status(200).json({ msg: 'Add Updated Successfully', data: result });
 
     } catch (error) {
         return res.status(400).json({ msg: 'Uspades Falotro' });
