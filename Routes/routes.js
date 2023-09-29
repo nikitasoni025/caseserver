@@ -3,6 +3,8 @@ import { getCokkie, subUserLogin, subUserLogout, subUserReg } from "../Controlle
 import { createLuckyNum, getluckyNum, updateLuckyNumbers } from "../Controller/luckyNum.js";
 import { verifyToken } from "../Middleware/tokenVerification.js";
 import { addAd, fetchAdds, updateAd } from "../Controller/addsController.js";
+import { addDayNight, fetchDayNight, updateDayNight } from "../Controller/dayNight.js";
+import { createGuesingTable, fetchGuessingTable, updateGuessing } from "../Controller/guessingTableController.js";
 
 const router=express.Router();
 
@@ -27,6 +29,16 @@ router.post('/ad/create',addAd);
 router.post('/ad/update',updateAd);
 router.get('/ad/get',fetchAdds);
 
+
+// Day Night Routes
+router.post('/daynight/create',addDayNight);
+router.post('/daynight/update',updateDayNight);
+router.get('/daynight/get',fetchDayNight);
+
+// Guessing Routes
+router.get('/guessing/get',fetchGuessingTable);
+router.post('/guessing/create',createGuesingTable);
+router.post('/guessing/update',updateGuessing);
 
 // router.post("/register",register);
 // router.post("/signin",userSignin);
