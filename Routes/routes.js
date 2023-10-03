@@ -1,20 +1,24 @@
 import express  from "express";
-import { getCokkie, subUserLogin, subUserLogout, subUserReg } from "../Controller/subUser.js";
+import { deleteAdmin, fetchAdminsWithEmail, fetchAdminsWithFilter, fetchAdminsWithId, getCokkie, subUserLogin, subUserLogout, subUserReg } from "../Controller/subUser.js";
 import { createLuckyNum, getluckyNum, updateLuckyNumbers } from "../Controller/luckyNum.js";
 import { verifyToken } from "../Middleware/tokenVerification.js";
 import { addAd, fetchAdds, updateAd } from "../Controller/addsController.js";
 import { addDayNight, fetchDayNight, updateDayNight } from "../Controller/dayNight.js";
 import { createGuesingTable, fetchGuessingTable, updateGuessing } from "../Controller/guessingTableController.js";
+import { createGame, fetchAllGames, fetchGamesByfilter, updateGame } from "../Controller/gamesController.js";
 
 const router=express.Router();
 
 
 // Sub User Api Routes
-
+router.get('/subuser/get',fetchAdminsWithFilter);
+router.get('/subuser/get/email',fetchAdminsWithEmail);
+router.get('/subuser/get/id',fetchAdminsWithId);
 router.post("/subuser/signup",subUserReg);
 router.post("/subuser/signin",subUserLogin);
 router.get("/subuser/logout",subUserLogout);
 router.get('/getcookie',getCokkie);
+router.delete('/subuser/delete/:id',deleteAdmin);
 
 
 // Lucky Number Api Routes
@@ -39,6 +43,13 @@ router.get('/daynight/get',fetchDayNight);
 router.get('/guessing/get',fetchGuessingTable);
 router.post('/guessing/create',createGuesingTable);
 router.post('/guessing/update',updateGuessing);
+
+
+// Game Routes
+router.get('/game/all',fetchAllGames);
+router.post('/game/create',createGame);
+router.get('/game/owner',fetchGamesByfilter);
+router.post('/game/update',updateGame);
 
 // router.post("/register",register);
 // router.post("/signin",userSignin);

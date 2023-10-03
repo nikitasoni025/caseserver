@@ -20,18 +20,10 @@ const subUserValidation=Joi.object({
         'string.empty':'Password is Required',
         'any.required':'Password is Required'
     }),
-    role:Joi.string().required().messages({
-        'string.empty':'role Is Required',
-        'any.required':'role Is Required'
-    }),
-    gameid:Joi.string().required().messages({
-        'string.empty':'gameid Is Required',
-        'any.required':'gameid Is Required'
-    }),
-    game:Joi.string().required().messages({
-        'string.empty':'game Is Required',
-        'any.required':'game Is Required'
-    }),
+    profilepic:Joi.string().required().messages({
+        'string.empty':'Profile Pic Is Required',
+        'any.required':'Profile Pic Is Required'
+    })
 })
 
 export default subUserValidation;

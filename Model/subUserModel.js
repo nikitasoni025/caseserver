@@ -6,6 +6,10 @@ const subAdminSchema = new mongoose.Schema({
         type:String,
         required:true
     },
+    profilepic:{
+        type:String,
+        required:true
+    },
     email:{
         type:String,
         unique:true,
@@ -23,16 +27,8 @@ const subAdminSchema = new mongoose.Schema({
     role:{
         type:String,
         required:true,
-        default:"admin"
+        default:"VTFS"
     },
-    gameid:{
-        type:String,
-        required:true,
-    },
-    game:{
-        type:String,
-        required:true
-    }
 
 },{timestamps:true});
 

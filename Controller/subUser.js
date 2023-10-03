@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import subUserValidation from "../Validation/subUserValidation.js";
 import subadmin from "../Model/subUserModel.js";
 import jwt from 'jsonwebtoken';
+import nodemailer from 'nodemailer';
 
 
 
@@ -29,29 +30,29 @@ export const getCokkie = async (req, res) => {
         const payload = decoded;
 
         try {
-           
+
             const user = await subadmin.findById(payload._id);
-      
+
             if (!user) {
-              return res.status(404).json({ msg: 'User not found' });
+                return res.status(404).json({ msg: 'User not found' });
             }
-      
-            
-            return res.status(200).json({ msg: 'Logged In User Found', data: { id: user._id, name: user.fullname, email: user.email, role: user.role, token } });
-          } catch (error) {
-            
+
+
+            return res.status(200).json({ msg: 'Logged In User Found', data: { id: user._id, name: user.fullname, email: user.email, role: user.role, token, profilepic: user.profilepic } });
+        } catch (error) {
+
             console.error(error);
             return res.status(500).json({ msg: 'Server error' });
-          }
+        }
     });
 
 }
 
 export const subUserReg = async (req, res) => {
 
-    const { fullname, email, phonenumber, password, role, gameid, game } = req.body;
+    const { fullname, email, phonenumber, password, profilepic } = req.body;
 
-    const validatedata = { fullname, email, phonenumber, password, role, gameid, game };
+    const validatedata = { fullname, email, phonenumber, password, profilepic };
     const { error, value } = subUserValidation.validate(validatedata);
 
     if (error) {
@@ -65,16 +66,41 @@ export const subUserReg = async (req, res) => {
             return res.status(400).json({ msg: "Sub Admin is Already present" });
         }
         else {
-
             const hashedpassword = await bcrypt.hash(password, 10);
             const addadmin = new subadmin({
-                fullname, phonenumber, email, password: hashedpassword, role, gameid, game
+                fullname, phonenumber, email, password: hashedpassword, profilepic
             });
 
-            const savedUser = await addadmin.save();
-            const token = createJwtToken(savedUser._id);
-            return res.status(200).json({ msg: "Sub Admin Added Successfully", token });
+            const savedUser = await addadmin.save().then(() => {
+                const transporter = nodemailer.createTransport({
+                    service: "gmail",
+                    auth: {
+                        user: "animeshverma161@gmail.com",
+                        pass: process.env.APP_PASSWORD,
+                    },
+                });
+                const mailOptions = {
 
+                    from: "animeshverma161@gmail.com",
+                    to: email,
+                    subject: "Registration Successfull Welcome To SRBOSS",
+                    html: `<div class="main" style="width:90%;height:100%;background:#2a2a2a;padding:25px;border-radius:10px;font-family:sans-serif;color:#fff;position:relative"><h1 style="color:#adff2f">Welcome ${fullname} To SRBOSS</h1><h3 style="color:#f0f8ff">Your True Satta Partner</h3><p>You have Been Successfully Registered As<span style="color:#adff2f">Admin</span></p><p>With Your Username as<span style="color:#adff2f"> ${email} or ${phonenumber} </span>and</p><p>Your Password as <span style="color:#adff2f">${password}</span></p><p>Click Here<a style="text-decoration:none;color:#69b9ff" href="https://srboss.netlify.app/admin/dash">Master Panel</a>To Get Started, SRBOSS.COM Awaits Your Presence</p><p>Thank You</p></div> `
+
+                };
+
+                transporter.sendMail(mailOptions, (error, info) => {
+                    if (error) {
+                        console.log(error);
+                        return res.status(500).json({ msg: "Email not sent" });
+                    }
+                    else {
+                        console.log(`Email sent` + info);
+                        return res.status(200).json({ msg: "Sub Admin Registered Successfully" });
+                    }
+                });
+
+
+            })
         }
     } catch (error) {
 
@@ -116,14 +142,14 @@ export const subUserLogin = async (req, res) => {
 
     try {
         const match = await bcrypt.compare(password, user.password);
-        if (user.password === password) {
+        if (match) {
             const token = createJwtToken(user._id);
             res.cookie("authToken", token, {
                 path: "/",
                 maxAge: 14 * 60 * 60 * 1000,
                 httpOnly: true,
             });
-            return res.status(200).json({ data: { id: user._id, name: user.fullname, email: user.email, role: user.role, token } });
+            return res.status(200).json({ data: { id: user._id, name: user.fullname, email: user.email, role: user.role, token, profilepic: user.profilepic } });
         } else {
             return res.status(400).json({ msg: "Password Did not Matched !!" });
         }
@@ -135,8 +161,79 @@ export const subUserLogin = async (req, res) => {
     }
 }
 
+export const fetchAdminsWithFilter = async (req, res) => {
+
+    const limit = req.query.limit || 5;
+    const page = req.query.page;
+
+    const startIndex = (page - 1) * limit;
+    try {
+        const count = await subadmin.countDocuments();
+        const userData = await subadmin.find().skip(startIndex).limit(limit);
+        return res.status(200).json({ data: userData, totalCount: count });
+
+    } catch (error) {
+        return res.status(400).json({ msg: "fetching failes", error: error.message });
+
+    }
+
+}
+
+export const fetchAdminsWithEmail = async (req, res) => {
+    let email = req.query.email;
+
+    let admins;
+    try {
+        if (email) {
+            admins = await subadmin.find({ email: { $regex: `^${email}` } });
+
+        } else {
+            admins = await subadmin.find();
+        }
+        return res.status(200).json(admins);
+
+    } catch (error) {
+        return res.status(400).json({ msg: error.message });
+    }
+
+}
+export const fetchAdminsWithId = async (req, res) => {
+    let id = req.query.id;
+    let admins;
+    try {
+        if (id) {
+            admins = await subadmin.findById(id);
+
+        } else {
+            return res.status(400).json({ msg: "Id is Required" });
+        }
+        return res.status(200).json(admins);
+
+    } catch (error) {
+        return res.status(400).json({ msg: error.message });
+    }
+
+}
+
 export const subUserLogout = async (req, res) => {
 
     res.clearCookie("authToken", { path: '/' });
     return res.status(200).json({ mag: "Cookie Cleared" });
+}
+
+export const deleteAdmin=async(req,res)=>{
+    try {
+        const admin=await subadmin.findById(req.params.id);
+        
+        if(admin){
+            await admin.deleteOne();
+            return res.status(200).json({msg:"User Deleted Successfully"});
+        }else{
+            return res.status(400).json({msg:"Requested User Not Found"}); 
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({msg:"Deletion Failed From The Server"});
+    }
+
 }
