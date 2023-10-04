@@ -148,6 +148,8 @@ export const subUserLogin = async (req, res) => {
                 path: "/",
                 maxAge: 14 * 60 * 60 * 1000,
                 httpOnly: true,
+                sameSite: "none", 
+                secure: true,  
             });
             return res.status(200).json({ data: { id: user._id, name: user.fullname, email: user.email, role: user.role, token, profilepic: user.profilepic } });
         } else {
