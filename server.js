@@ -10,7 +10,7 @@ dotenv.config();
 // CRATING AN EXPRESS APP
 const app=express();
 app.use(cors({
-    origin: "https://caseserver.onrender.com",
+    origin: "https://srboss.onrender.com",
     credentials: true,
     allowedHeaders: [
       "set-cookie",
