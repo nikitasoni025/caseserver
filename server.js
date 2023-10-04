@@ -10,7 +10,7 @@ dotenv.config();
 // CRATING AN EXPRESS APP
 const app=express();
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: "https://caseserver.onrender.com",
     credentials: true,
     allowedHeaders: [
       "set-cookie",
