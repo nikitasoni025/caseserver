@@ -9,17 +9,17 @@ dotenv.config();
 
 // CRATING AN EXPRESS APP
 const app=express();
-// app.use(cors({
-//     origin: "https://caseserver.onrender.com",
-//     credentials: true,
-//     allowedHeaders: [
-//       "set-cookie",
-//       "Content-Type",
-//       "Access-Control-Allow-Origin",
-//       "Access-Control-Allow-Credentials",
-//     ],
-//   }));
-app.use(cors());
+app.use(cors({
+    origin: "https://caseserver.onrender.com",
+    credentials: true,
+    allowedHeaders: [
+      "set-cookie",
+      "Content-Type",
+      "Access-Control-Allow-Origin",
+      "Access-Control-Allow-Credentials",
+    ],
+  }));
+// app.use(cors());
 app.use(bodyParser.json({extended:true}));
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(router);
