@@ -205,16 +205,18 @@ export const fetchAdminsWithId = async (req, res) => {
     try {
         if (id) {
             admins = await subadmin.findById(id);
-
+            if(admins){
+                return res.status(200).json(admins);
+            }else{
+                return res.status(400).json({msg:"Owner Not Found"});
+            }
         } else {
             return res.status(400).json({ msg: "Id is Required" });
         }
-        return res.status(200).json(admins);
 
     } catch (error) {
         return res.status(400).json({ msg: error.message });
     }
-
 }
 
 export const subUserLogout = async (req, res) => {

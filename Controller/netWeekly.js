@@ -18,9 +18,9 @@ export const addNetWeekly=async(req,res)=>{
     try {
         const netweek=new netWeekly({title,content});
         netweek.save();
-        return res.status(200).json({msg:"Ad Added Successfully"});
+        return res.status(200).json({msg:"Net Weekly Added Successfully"});
     } catch (error) {
-        return res.status(400).json({msg:"Ad Creation Failed !"}); 
+        return res.status(400).json({msg:"Net Weekly Creation Failed !"}); 
     }
 }
 
@@ -32,13 +32,12 @@ export const updateNetWeekly=async (req,res)=>{
         return res.status(400).json({msg:"All Fields Are Required !"});
     }
     try {
-
         const result = await netWeekly.findByIdAndUpdate(id, updateData, { new: true });
         if (!result) {
             return res.status(400).json({ msg: "Data Not Found" });
         }
 
-        return res.status(200).json({ msg: 'Net Weekly Updated Successfully', result: result });
+        return res.status(200).json({ msg: 'Net Weekly Updated Successfully'});
 
     } catch (error) {
         return res.status(400).json({ msg: 'Uspades Falotro' });

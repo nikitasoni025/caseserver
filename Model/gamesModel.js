@@ -22,6 +22,10 @@ const gamesSchema=new mongoose.Schema({
         type:Boolean,
         default:false
     },
+    isDeleted:{
+        type:Boolean,
+        default:false
+    },
     owner_id:{
         type:String
     },

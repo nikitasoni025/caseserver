@@ -16,11 +16,11 @@ export const addDayNight=async(req,res)=>{
         return res.status(400).json({msg:"All Fields Are Required"});
     }
     try {
-        const add=new daynight({adContent:content});
+        const add=new daynight({title,content});
         add.save();
-        return res.status(200).json({msg:"Guessing Added Successfully"});
+        return res.status(200).json({msg:"Day Night Added Successfully"});
     } catch (error) {
-        return res.status(400).json({msg:"Guessing Creation Failed !"}); 
+        return res.status(400).json({msg:"Day Night Creation Failed !"}); 
     }
 }
 

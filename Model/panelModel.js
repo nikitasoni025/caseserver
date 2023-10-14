@@ -6,7 +6,7 @@ const panelSubSchema=new mongoose.Schema({
         type:Boolean,
         default:false
     }
-})
+},{_id:false});
 
 
 const panelDataSchema=new mongoose.Schema({
@@ -18,7 +18,7 @@ const panelDataSchema=new mongoose.Schema({
     friday: panelSubSchema,
     satday: panelSubSchema,
     sunday: panelSubSchema
-})
+},{timestamps:true})
 
 const panelSchema=new mongoose.Schema({
 
