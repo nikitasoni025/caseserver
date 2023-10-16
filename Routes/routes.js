@@ -3,7 +3,7 @@ import { deleteAdmin, fetchAdminsWithEmail, fetchAdminsWithFilter, fetchAdminsWi
 import { createLuckyNum, getluckyNum, updateLuckyNumbers } from "../Controller/luckyNum.js";
 import { verifyToken } from "../Middleware/tokenVerification.js";
 import { addAd, fetchAdds, updateAd } from "../Controller/addsController.js";
-import { addDayNight, fetchDayNight, updateDayNight } from "../Controller/dayNight.js";
+import { addDayNight, deleteDayNight, fetchDayNight, updateDayNight } from "../Controller/dayNight.js";
 import { createGuesingTable, fetchGuessingTable, updateGuessing } from "../Controller/guessingTableController.js";
 import { createGame, fetchAllDeletedGames, fetchAllGames, fetchAllGamesWithLive, fetchAllGamesWithoutLimit, fetchGamesByfilter, updateGame } from "../Controller/gamesController.js";
 import { createJodi, deleteJodi, fetchAllJodis, fetchJodi, updateJodi } from "../Controller/jodiController.js";
@@ -41,6 +41,7 @@ router.get('/ad/get',fetchAdds);
 router.post('/daynight/create',addDayNight);
 router.post('/daynight/update',updateDayNight);
 router.get('/daynight/get',fetchDayNight);
+router.post('/daynight/delete',deleteDayNight);
 
 // Net Weekly
 router.get('/netweek/get',fetchNetWeekly);
