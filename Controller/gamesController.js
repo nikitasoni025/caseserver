@@ -12,7 +12,7 @@ export const fetchAllGames = async (req, res) => {
     const startIndex = (page - 1) * limit;
     try {
         const count = await games.countDocuments();
-        const userData = await games.find({isDeleted:false}).skip(startIndex).limit(limit).sort({ createdAt: -1 });
+        const userData = await games.find({ isDeleted: false }).skip(startIndex).limit(limit).sort({ seq: 1 });
         return res.status(200).json({ data: userData, totalCount: count });
     } catch (error) {
         return res.status(400).json({ msg: "Fetching Failed" });
@@ -21,7 +21,7 @@ export const fetchAllGames = async (req, res) => {
 
 export const fetchAllGamesWithoutLimit = async (req, res) => {
     try {
-        const userData = await games.find({isDeleted:false});
+        const userData = await games.find({ isDeleted: false }).sort({ seq: 1 });
         return res.status(200).json({ data: userData });
     } catch (error) {
         return res.status(400).json({ msg: "Fetching Failed" });
@@ -29,7 +29,7 @@ export const fetchAllGamesWithoutLimit = async (req, res) => {
 }
 export const fetchAllGamesWithLive = async (req, res) => {
     try {
-        const userData = await games.find({islive:true,isDeleted:false});
+        const userData = await games.find({ islive: true, isDeleted: false });
         return res.status(200).json({ data: userData });
     } catch (error) {
         return res.status(400).json({ msg: "Fetching Failed" });
@@ -37,7 +37,7 @@ export const fetchAllGamesWithLive = async (req, res) => {
 }
 export const fetchAllDeletedGames = async (req, res) => {
     try {
-        const userData = await games.find({isDeleted:true});
+        const userData = await games.find({ isDeleted: true });
         return res.status(200).json({ data: userData });
     } catch (error) {
         return res.status(400).json({ msg: "Fetching Failed" });
@@ -58,7 +58,7 @@ export const fetchGamesByfilter = async (req, res) => {
     try {
 
         const count = await games.countDocuments();
-        const gameData = await games.find({ owner_id: owner_id }).skip(startIndex).limit(limit).sort({ created_at: -1 });
+        const gameData = await games.find({ owner_id: owner_id }).skip(startIndex).limit(limit).sort({ seq: 1 });
         if (gameData.length <= 0) {
             return res.status(400).json({ msg: "No Game Found Associated With this Owner" });
         }
@@ -73,9 +73,9 @@ export const fetchGamesByfilter = async (req, res) => {
 
 export const createGame = async (req, res) => {
 
-    const { gamename, gametype, time, result, owner_id } = req.body;
+    const { seq, gamename, gametype, time, result, owner_id } = req.body;
 
-    const validatedata = { gamename, gametype, time, result };
+    const validatedata = { seq, gamename, gametype, time, result };
     const { error, value } = gamesValidations.validate(validatedata);
 
     if (error) {
@@ -92,7 +92,7 @@ export const createGame = async (req, res) => {
         const panel_id = uuidv4() + gamename.split(" ")[0].slice(0, 3);
 
         const gameData = new games({
-            gamename, gametype, time, result, owner_id: owner_id ? owner_id : "", jodi_id, panel_id
+            seq, gamename, gametype, time, result, owner_id: owner_id ? owner_id : "", jodi_id, panel_id, live_start_time: "", live_end_time: ""
         })
 
         await gameData.save();
@@ -205,6 +205,45 @@ export const updateGame = async (req, res) => {
     } catch (error) {
         return res.status(400).json({ msg: 'Updation Failed' });
 
+    }
+
+}
+
+export const updateOneGame = async (req, res) => {
+    const { items } = req.body;
+
+
+
+    try {
+        // Update the items in the database
+        for (const item of items) {
+            await games.findByIdAndUpdate(item.id, { seq: item.seq });
+        }
+
+        res.status(200).json({ msg: 'Items updated successfully' });
+    } catch (error) {
+        console.error('Error updating items:', error);
+        res.status(400).json({ error: 'Internal Server Error' });
+    }
+}
+
+export const updteSpecificGames = async (req,res) => {
+    try {
+        const {ids,updateData} = req.body;
+
+        for (const id of ids) {
+            const item = await games.findById(id);
+            if (!item) {
+                return res.status(400).json({ msg: 'Item not found' });
+            }
+            item.islive = updateData.islive;
+            item.live_start_time = updateData.live_start_time;
+            item.live_end_time = updateData.live_end_time;
+            await item.save();
+        }
+        res.status(200).json({ message: 'Items updated successfully' });
+    } catch (error) {
+        res.status(400).json({ message: 'An error occurred while updating items' });
     }
 
 }

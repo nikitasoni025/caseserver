@@ -221,7 +221,7 @@ export const fetchAdminsWithId = async (req, res) => {
 
 export const subUserLogout = async (req, res) => {
 
-    res.clearCookie("authToken", { path: '/' });krntierngior
+    res.clearCookie("authToken", { path: '/' });
     return res.status(200).json({ mag: "Cookie Cleared" });
 }
 

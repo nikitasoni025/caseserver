@@ -27,8 +27,11 @@ const panelSchema=new mongoose.Schema({
     panel_id:{
         type:String,
         required:true
+    },
+    isDeleted:{
+        type:Boolean,
+        default:false
     }
-  
 },{timestamps:true});
 
 

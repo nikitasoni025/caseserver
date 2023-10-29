@@ -1,6 +1,9 @@
 import mongoose  from "mongoose";
 
 const gamesSchema=new mongoose.Schema({
+    seq:{
+        type:Number,
+    },
     gamename:{
         type:String,
         required:true
@@ -17,6 +20,12 @@ const gamesSchema=new mongoose.Schema({
     islive:{
         type:Boolean,
         default:false
+    },
+    live_start_time:{
+        type:String,
+    },
+    live_end_time:{
+        type:String,
     },
     hilite:{
         type:Boolean,

@@ -1,17 +1,17 @@
 import panel from "../Model/panelModel.js";
 
-export const fetchAllPanel=async(req,res)=>{
+export const fetchAllPanel = async (req, res) => {
   try {
-    const panelData=await panel.find();
-    if(panelData && panelData.length >0){
-      return res.status(200).json({msg:"Panel Data Fetched",data:panelData});
-    }else{
-      return res.status(400).json({msg:"Panel Data Not Found"});
+    const panelData = await panel.find({ isDeleted: false });
+    if (panelData && panelData.length > 0) {
+      return res.status(200).json({ msg: "Panel Data Fetched", data: panelData });
+    } else {
+      return res.status(400).json({ msg: "Panel Data Not Found" });
     }
-    
+
   } catch (error) {
-    return res.status(400).json({msg:"Server Error"});
-    
+    return res.status(400).json({ msg: "Server Error" });
+
   }
 
 }
@@ -22,7 +22,7 @@ export const fetchPanel = async (req, res) => {
   let panelData;
   try {
     if (id) {
-      panelData = await panel.find({panel_id:id}).sort({ createdAt: -1 });
+      panelData = await panel.find({ panel_id: id }).sort({ createdAt: -1 });
       if (panelData) {
         return res.status(200).json(panelData);
       } else {
@@ -42,7 +42,7 @@ export const createPanel = async (req, res) => {
   try {
     const { panelId, newData } = req.body;
 
-    const panelData = await panel.findOne({panel_id:panelId});
+    const panelData = await panel.findOne({ panel_id: panelId });
 
     if (!panelData) {
       return res.status(404).json({ error: 'Panel not found' });
@@ -85,6 +85,27 @@ export const updatePanel = async (req, res) => {
   }
 }
 
+export const updateOuterPanel = async (req, res) => {
+
+  const { id, updateData } = req.body;
+
+  try {
+    const panelData = await panel.findOneAndUpdate(
+      { panel_id: id },
+      updateData,
+      { new: true }
+    );
+
+    if (panelData) {
+      res.status(200).json({ message: 'Data updated successfully' });
+    } else {
+      res.status(404).json({ error: 'Data not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+
+}
 
 export const deletePanel = async (req, res) => {
   try {

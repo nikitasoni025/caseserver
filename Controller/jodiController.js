@@ -2,7 +2,7 @@ import jodi from "../Model/jodiModel.js";
 
 export const fetchAllJodis=async(req,res)=>{
   try {
-    const jodiData=await jodi.find();
+    const jodiData=await jodi.find({isDeleted:false});
     if(jodiData && jodiData.length >0){
       return res.status(200).json({msg:"Jodi Data Fetched",data:jodiData});
     }else{
@@ -90,6 +90,27 @@ export const updateJodi=async (req,res)=>{
     return res.status(200).json({ message: 'Jodi data updated successfully', data: existingJodi });
   } catch (error) {
     return res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
+export const updateOuterJodi=async (req,res)=>{
+
+  const { id, updateData } = req.body;
+
+  try {
+    const jodiData = await jodi.findOneAndUpdate(
+      { jodi_id: id },
+      updateData,
+      { new: true }
+    );
+
+    if (jodiData) {
+      res.status(200).json({ message: 'Data updated successfully' });
+    } else {
+      res.status(404).json({ error: 'Data not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 }
 

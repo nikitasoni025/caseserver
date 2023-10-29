@@ -41,7 +41,6 @@ export const updateAd=async (req,res)=>{
 
     } catch (error) {
         return res.status(400).json({ msg: 'Uspades Falotro' });
-
     }
 
 }

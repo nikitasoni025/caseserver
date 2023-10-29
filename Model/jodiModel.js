@@ -1,17 +1,17 @@
-import mongoose  from "mongoose";
+import mongoose from "mongoose";
 
 
-const subSchema=new mongoose.Schema({
-    value:{
-        type:String
+const subSchema = new mongoose.Schema({
+    value: {
+        type: String
     },
-    hilite:{
-        type:Boolean,
-        default:false
+    hilite: {
+        type: Boolean,
+        default: false
     }
-},{_id:false})
+}, { _id: false })
 
-const jodiDataSchema=new mongoose.Schema({
+const jodiDataSchema = new mongoose.Schema({
     monday: subSchema,
     tueday: subSchema,
     wedday: subSchema,
@@ -20,22 +20,26 @@ const jodiDataSchema=new mongoose.Schema({
     satday: subSchema,
     sunday: subSchema
 
-},{timestamps:true})
+}, { timestamps: true })
 
-const jodiSchema=new mongoose.Schema({
+const jodiSchema = new mongoose.Schema({
 
-    title:{type:String,required:true},
-    data:[jodiDataSchema],
-    jodi_id:{
-        type:String,
-        required:true
+    title: { type: String, required: true },
+    data: [jodiDataSchema],
+    jodi_id: {
+        type: String,
+        required: true
+    },
+    isDeleted: {
+        type: Boolean,
+        default: false
     }
-    
-},{timestamps:true});
+
+}, { timestamps: true });
 
 
 
 
-const jodi=new mongoose.model('jodis',jodiSchema);
+const jodi = new mongoose.model('jodis', jodiSchema);
 
 export default jodi;
