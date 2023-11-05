@@ -143,3 +143,23 @@ export const deleteJodi=async(req,res)=>{
     res.status(500).json({ error: 'Internal Server Error' });
   }
 }
+
+
+
+
+export const deleteOuterJodi = async (req, res) => {
+  const itemId = req.body.id;
+
+  try {
+      const item = await jodi.findOneAndDelete({jodi_id:itemId});
+
+      if (!item) {
+          return res.status(400).json({ error: 'Item not found' });
+      }
+
+      return res.status(200).json({ message: 'Item deleted successfully' });
+  } catch (err) {
+      // return res.status(400).json({ error: 'Error deleting item' });
+  }
+
+}

@@ -133,3 +133,21 @@ export const deletePanel = async (req, res) => {
     res.status(400).json({ error: 'Internal Server Error' });
   }
 }
+
+
+export const deleteOuterPanel = async (req, res) => {
+  const itemId = req.body.id;
+
+  try {
+      const item = await panel.findOneAndDelete({panel_id:itemId});
+
+      if (!item) {
+          return res.status(400).json({ error: 'Item not found' });
+      }
+
+      return res.status(200).json({ message: 'Item deleted successfully' });
+  } catch (err) {
+      // return res.status(400).json({ error: 'Error deleting item' });
+  }
+
+}

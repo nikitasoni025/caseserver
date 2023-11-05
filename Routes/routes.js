@@ -5,9 +5,9 @@ import { verifyToken } from "../Middleware/tokenVerification.js";
 import { addAd, fetchAdds, updateAd } from "../Controller/addsController.js";
 import { addDayNight, deleteDayNight, fetchDayNight, updateDayNight } from "../Controller/dayNight.js";
 import { createGuesingTable, fetchGuessingTable, updateGuessing } from "../Controller/guessingTableController.js";
-import { createGame, fetchAllDeletedGames, fetchAllGames, fetchAllGamesWithLive, fetchAllGamesWithoutLimit, fetchGamesByfilter, updateGame, updateOneGame, updteSpecificGames } from "../Controller/gamesController.js";
-import { createJodi, deleteJodi, fetchAllJodis, fetchJodi, updateJodi, updateOuterJodi } from "../Controller/jodiController.js";
-import { createPanel, deletePanel, fetchAllPanel, fetchPanel, updateOuterPanel, updatePanel } from "../Controller/panelController.js";
+import { createGame, deleteGame, fetchAllDeletedGames, fetchAllGames, fetchAllGamesWithLive, fetchAllGamesWithoutLimit, fetchGamesByfilter, updateGame, updateOneGame, updteSpecificGames } from "../Controller/gamesController.js";
+import { createJodi, deleteJodi, deleteOuterJodi, fetchAllJodis, fetchJodi, updateJodi, updateOuterJodi } from "../Controller/jodiController.js";
+import { createPanel, deleteOuterPanel, deletePanel, fetchAllPanel, fetchPanel, updateOuterPanel, updatePanel } from "../Controller/panelController.js";
 import { addNetWeekly, fetchNetWeekly, updateNetWeekly } from "../Controller/netWeekly.js";
 
 const router=express.Router();
@@ -64,6 +64,7 @@ router.get('/game/owner',fetchGamesByfilter);
 router.post('/game/update',updateGame);
 router.post('/game/update/one',updateOneGame);
 router.post('/game/update/speci',updteSpecificGames);
+router.post('/game/delete',deleteGame);
 
 // Jodi Routes
 router.get('/jodi/get',fetchJodi);
@@ -72,6 +73,7 @@ router.post('/jodi/create',createJodi);
 router.post('/jodi/update',updateJodi);
 router.post('/jodi/update/main',updateOuterJodi);
 router.post('/jodi/delete',deleteJodi);
+router.post('/jodi/delete/perm',deleteOuterJodi);
 
 // Panel Routes
 router.get('/panel/get',fetchPanel);
@@ -80,6 +82,7 @@ router.post('/panel/create',createPanel);
 router.post('/panel/update',updatePanel);
 router.post('/panel/update/main',updateOuterPanel);
 router.post('/panel/delete',deletePanel);
+router.post('/panel/delete/perm',deleteOuterPanel);
 
 // router.post("/register",register);
 // router.post("/signin",userSignin);

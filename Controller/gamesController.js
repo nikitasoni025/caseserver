@@ -2,7 +2,31 @@ import games from "../Model/gamesModel.js";
 import jodi from "../Model/jodiModel.js";
 import panel from "../Model/panelModel.js";
 import gamesValidations from "../Validation/gamesValidation.js";
+import cron from 'node-cron';
 import { v4 as uuidv4 } from 'uuid';
+
+
+async function updateGameStatus() {
+    const gamesData = await games.find();
+  
+    const now = new Date();
+    const currentTime = now.getHours() + ':' + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes();
+
+    for (const game of gamesData) {
+      if (currentTime >= game.live_start_time && currentTime <= game.live_end_time) {
+        game.islive = true;
+      } else {
+        game.islive = false;
+      }
+  
+      await game.save();
+    }
+  }
+  
+  
+
+
+cron.schedule('* * * * *', updateGameStatus);
 
 
 export const fetchAllGames = async (req, res) => {
@@ -264,6 +288,24 @@ export const fetchGamesWithPagination = async (req, res) => {
     } catch (error) {
         return res.status(400).json({ msg: "fetching failes", error: error.message });
 
+    }
+
+}
+
+
+export const deleteGame = async (req, res) => {
+    const itemId = req.body.id;
+
+    try {
+        const item = await games.findByIdAndRemove(itemId);
+
+        if (!item) {
+            return res.status(400).json({ error: 'Item not found' });
+        }
+
+        return res.status(200).json({ message: 'Item deleted successfully' });
+    } catch (err) {
+        // return res.status(400).json({ error: 'Error deleting item' });
     }
 
 }
