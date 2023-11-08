@@ -8,22 +8,29 @@ import { v4 as uuidv4 } from 'uuid';
 
 async function updateGameStatus() {
     const gamesData = await games.find();
-  
+
     const now = new Date();
-    const currentTime = now.getHours() + ':' + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes();
+    const currentHour = now.getHours();
+    const currentMinute = now.getMinutes();
 
     for (const game of gamesData) {
-      if (currentTime >= game.live_start_time && currentTime <= game.live_end_time) {
-        game.islive = true;
-      } else {
-        game.islive = false;
-      }
-  
-      await game.save();
+        const [startHour, startMinute] = game.live_start_time.split(':').map(Number);
+        const [endHour, endMinute] = game.live_end_time.split(':').map(Number);
+
+        if (
+            (currentHour > startHour || (currentHour === startHour && currentMinute >= startMinute)) &&
+            (currentHour < endHour || (currentHour === endHour && currentMinute <= endMinute))
+        ) {
+            game.islive = true;
+        } else {
+            game.islive = false;
+        }
+
+        await game.save();
     }
-  }
-  
-  
+}
+
+
 
 
 cron.schedule('* * * * *', updateGameStatus);
@@ -251,9 +258,9 @@ export const updateOneGame = async (req, res) => {
     }
 }
 
-export const updteSpecificGames = async (req,res) => {
+export const updteSpecificGames = async (req, res) => {
     try {
-        const {ids,updateData} = req.body;
+        const { ids, updateData } = req.body;
 
         for (const id of ids) {
             const item = await games.findById(id);
